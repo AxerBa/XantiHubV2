@@ -47,7 +47,7 @@ local Button = Tab:CreateButton({
     Name = "Tsb | Aimbot V1",
     Callback = function()
         -- Butona basıldığında yapılacak işlemler
-        print("Xanti butonuna basıldı!")
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/AxerBa/XantiHubV2/refs/heads/main/Modulas/Aimbot.lua'))()
     end,
 })
 
