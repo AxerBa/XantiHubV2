@@ -43,7 +43,7 @@ TabMain:CreateButton({
     Name = "Tsb | Aimbot V1",
     Callback = function()
         -- Aimbot scriptini yükle
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/AxerBa/XantiHubV2/refs/heads/main/Modulas/Aimbot'))()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/AxerBa/XantiHubV2/refs/heads/main/Modulas/Aim.lua'))()
     end,
 })
 
