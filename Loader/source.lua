@@ -1,55 +1,65 @@
+-- Rayfield yükleniyor
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-
+-- Ana pencere oluşturuluyor
 local Window = Rayfield:CreateWindow({
     Name = "Xanti Hub",
-    Icon = 0, -- İkon kullanmak istemiyorsanız 0 bırakın
-    LoadingTitle = "Xanti İnterface",
+    LoadingTitle = "Xanti Interface",
     LoadingSubtitle = "by Axrex",
-    Theme = "Ocean", -- Temalar: Default, Aqua, Midnight, etc.
-
-    ToggleUIKeybind = "K", -- UI'yi aç/kapat tuşu
-
-    DisableRayfieldPrompts = false,
-    DisableBuildWarnings = false,
+    Theme = "Ocean", -- Tema: Default, Aqua, Midnight, Ocean, vb.
+    ToggleUIKeybind = Enum.KeyCode.K, -- K tuşuyla GUI aç/kapanır
 
     ConfigurationSaving = {
         Enabled = true,
-        FolderName = "Axrex", -- Klasör adı (string olmalı)
-        FileName = "Axrex Hub"
+        FolderName = "Axrex", -- Kullanıcı dizininde "Axrex" klasörü
+        FileName = "AxrexHub_Config"
     },
 
     Discord = {
         Enabled = false,
-        Invite = "noinvitelink",
+        Invite = "noinvitelink", -- Discord davet kodu (discord.gg/ yazma)
         RememberJoins = true
     },
 
-    KeySystem = true, -- İsterseniz key sistemini açabilirsiniz
+    KeySystem = true, -- Key sistemi aktif
     KeySettings = {
         Title = "Xanti Hub",
         Subtitle = "Key System",
-        Note = "No method of obtaining the key is provided",
-        FileName = "Key",
+        Note = "Anahtarı giriniz: Axrex",
+        FileName = "XantiHubKey", -- Kaydedilen key dosyası
         SaveKey = true,
         GrabKeyFromSite = false,
-        Key = {"Axrex"}
+        Key = {"Axrex"} -- Kabul edilen key(ler)
     }
 })
 
--- Sekmeler (Tablar)
-local Tab = Window:CreateTab("Main", 4483362458) -- Başlık, İkon ID
-local TabMisc = Window:CreateTab("Script", 4483362458)
-local TabCre = Window:CreateTab("Credit", 4483362458)
+-- Sekmeler oluşturuluyor
+local TabMain = Window:CreateTab("Main", 4483362458) -- Roblox logo ID
+local TabScripts = Window:CreateTab("Scripts", 4483362458)
+local TabCredits = Window:CreateTab("Credits", 4483362458)
 
--- Buton örneği
-local Button = Tab:CreateButton({
+-- Ana sekme butonu
+TabMain:CreateButton({
     Name = "Tsb | Aimbot V1",
     Callback = function()
-        -- Butona basıldığında yapılacak işlemler
+        -- Aimbot scriptini yükle
         loadstring(game:HttpGet('https://raw.githubusercontent.com/AxerBa/XantiHubV2/refs/heads/main/Modulas/Aimbot.lua'))()
     end,
 })
 
--- Kaydedilmiş yapılandırmayı yükle
+-- Örnek başka script (Script sekmesinde)
+TabScripts:CreateButton({
+    Name = "Fly Script",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/YkBUq0mC"))() -- Basit fly
+    end,
+})
+
+-- Credit kısmı
+TabCredits:CreateParagraph({
+    Title = "Geliştirici",
+    Content = "Made by Axrex | Xanti Hub v1.0"
+})
+
+-- Yapılandırmayı yükle
 Rayfield:LoadConfiguration()
