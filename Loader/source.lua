@@ -1,53 +1,52 @@
--- Rayfield yükleniyor
-local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Rayfield/main/source"))()
+-- Rayfield UI Kit yükleniyor
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 
 -- Ana pencere oluşturuluyor
 local Window = Rayfield:CreateWindow({
     Name = "Xanti Hub",
     LoadingTitle = "Xanti Interface",
     LoadingSubtitle = "by Axrex",
-    Theme = "Ocean", -- Temalar: Default, Aqua, Midnight, Ocean, vb.
-    ToggleUIKeybind = "K", -- "K" tuşuyla GUI aç/kapanır
+    Theme = "Ocean",
+    ToggleUIKeybind = Enum.KeyCode.K, -- GUI aç/kapat tuşu
 
     ConfigurationSaving = {
         Enabled = true,
-        FolderName = "Axrex", -- Kullanıcı dizininde "Axrex" klasörü
-        FileName = "AxrexHub_Config"
+        FolderName = "Axrex", -- Kaydedilen klasör
+        FileName = "XantiHub_Config" -- Konfigürasyon dosyası
     },
 
     Discord = {
         Enabled = false,
-        Invite = "noinvitelink", -- Discord davet kodu (discord.gg/ yazma)
+        Invite = "noinvitelink",
         RememberJoins = true
     },
 
-    KeySystem = true, -- Key sistemi aktif
+    KeySystem = true,
     KeySettings = {
         Title = "Xanti Hub",
         Subtitle = "Key System",
         Note = "Anahtarı giriniz: Axrex",
-        FileName = "XantiHubKey", -- Kaydedilen key dosyası
+        FileName = "XantiHubKey",
         SaveKey = true,
         GrabKeyFromSite = false,
-        Key = {"Axrex"} -- Kabul edilen key(ler)
+        Key = {"Axrex"}
     }
 })
 
--- Sekmeler oluşturuluyor
-local TabMain = Window:CreateTab("Main", 4483362458) -- Roblox logo ID
+-- Sekmeler
+local TabMain = Window:CreateTab("Main", 4483362458)
 local TabScripts = Window:CreateTab("Scripts", 4483362458)
 local TabCredits = Window:CreateTab("Credits", 4483362458)
 
--- Aimbot scripti (Main sekmesinde)
+-- Aimbot Butonu (ÇALIŞAN URL İLE)
 TabMain:CreateButton({
     Name = "Tsb | Aimbot V1",
     Callback = function()
-        -- Aimbot scripti düzgün link ile yükleniyor
         loadstring(game:HttpGet("https://raw.githubusercontent.com/AxerBa/XantiHubV2/main/Modulas/Aim.lua"))()
     end,
 })
 
--- Basit Fly scripti (Scripts sekmesinde)
+-- Fly Script Butonu
 TabScripts:CreateButton({
     Name = "Fly Script",
     Callback = function()
@@ -55,11 +54,11 @@ TabScripts:CreateButton({
     end,
 })
 
--- Credit sekmesi
+-- Credits
 TabCredits:CreateParagraph({
     Title = "Geliştirici",
     Content = "Made by Axrex | Xanti Hub v1.0"
 })
 
--- Yapılandırmayı yükle
+-- Yapılandırma yükleniyor
 Rayfield:LoadConfiguration()
