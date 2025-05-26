@@ -6,7 +6,7 @@ local UserInputService = game:GetService("UserInputService")
 
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
-local holdingQ = false
+local holdingE = false
 local targetPlayer = nil
 
 local function getCharacter()
@@ -37,13 +37,13 @@ end
 -- GUI Oluştur
 local gui = Instance.new("BillboardGui")
 gui.Name = "TargetGUI"
-gui.Size = UDim2.new(0, 200, 0, 40)
+gui.Size = UDim2.new(0, 200, 0, 60)
 gui.StudsOffset = Vector3.new(0, 3, 0)
 gui.AlwaysOnTop = true
 
 -- İsim
 local nameLabel = Instance.new("TextLabel")
-nameLabel.Size = UDim2.new(1, 0, 1, 0)
+nameLabel.Size = UDim2.new(1, 0, 0.5, 0)
 nameLabel.Position = UDim2.new(0, 0, 0, 0)
 nameLabel.BackgroundTransparency = 1
 nameLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
@@ -53,17 +53,29 @@ nameLabel.Font = Enum.Font.GothamBold
 nameLabel.Text = ""
 nameLabel.Parent = gui
 
+-- Can
+local healthLabel = Instance.new("TextLabel")
+healthLabel.Size = UDim2.new(1, 0, 0.5, 0)
+healthLabel.Position = UDim2.new(0, 0, 0.5, 0)
+healthLabel.BackgroundTransparency = 1
+healthLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+healthLabel.TextStrokeTransparency = 0
+healthLabel.TextScaled = true
+healthLabel.Font = Enum.Font.Gotham
+healthLabel.Text = ""
+healthLabel.Parent = gui
+
 -- Input kontrolü
 UserInputService.InputBegan:Connect(function(input, gpe)
     if gpe then return end
-    if input.KeyCode == Enum.KeyCode.Q then
-        holdingQ = true
+    if input.KeyCode == Enum.KeyCode.E then
+        holdingE = true
     end
 end)
 
 UserInputService.InputEnded:Connect(function(input)
-    if input.KeyCode == Enum.KeyCode.Q then
-        holdingQ = false
+    if input.KeyCode == Enum.KeyCode.E then
+        holdingE = false
         gui.Parent = nil
         targetPlayer = nil
     end
@@ -71,7 +83,7 @@ end)
 
 -- Ana döngü
 RunService.RenderStepped:Connect(function()
-    if holdingQ then
+    if holdingE then
         local char = getCharacter()
         local myHRP = char:FindFirstChild("HumanoidRootPart")
         local newTarget = getClosestPlayer()
@@ -81,9 +93,6 @@ RunService.RenderStepped:Connect(function()
             local lookDir = (targetHRP.Position - myHRP.Position).Unit
             myHRP.CFrame = CFrame.new(myHRP.Position, myHRP.Position + lookDir)
 
-            -- Kamerayı da döndürerek ShiftLock açık olsa bile yönlendirme sağlar
-            Camera.CFrame = CFrame.new(Camera.CFrame.Position, targetHRP.Position)
-
             if targetPlayer ~= newTarget then
                 gui.Parent = targetHRP
                 targetPlayer = newTarget
@@ -92,7 +101,7 @@ RunService.RenderStepped:Connect(function()
             -- GUI Bilgilerini güncelle
             nameLabel.Text = "🎯 " .. newTarget.DisplayName
             local hum = newTarget.Character:FindFirstChildOfClass("Humanoid")
-            nameLabel.Text = nameLabel.Text .. "\n❤️ Can: " .. (hum and math.floor(hum.Health) or "??")
+            healthLabel.Text = "❤️ Can: " .. (hum and math.floor(hum.Health) or "??")
         end
     end
 end)
