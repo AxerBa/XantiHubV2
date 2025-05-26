@@ -1,121 +1,110 @@
--- Güvenli local script, client'ta çalışır, server göremez
-
+-- Services
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 
+-- Vars
 local LocalPlayer = Players.LocalPlayer
-local Camera = workspace.CurrentCamera
-local holdingF = false
-local targetPlayer = nil
+local Mouse = LocalPlayer:GetMouse()
+local holding = false
+local target = nil
 
-local function getCharacter()
-    return LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-end
-
--- En yakın oyuncuyu bulur
+-- Function: En yakın oyuncuyu bul
 local function getClosestPlayer()
-    local myHRP = getCharacter():FindFirstChild("HumanoidRootPart")
-    if not myHRP then return nil end
-
-    local closest = nil
-    local shortest = math.huge
-
-    for _, player in pairs(Players:GetPlayers()) do
-        if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            local dist = (player.Character.HumanoidRootPart.Position - myHRP.Position).Magnitude
-            if dist < shortest then
-                shortest = dist
-                closest = player
-            end
-        end
-    end
-
-    return closest
+	local closest = nil
+	local shortest = math.huge
+	for _, player in pairs(Players:GetPlayers()) do
+		if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+			local distance = (LocalPlayer.Character.HumanoidRootPart.Position - player.Character.HumanoidRootPart.Position).Magnitude
+			if distance < shortest then
+				shortest = distance
+				closest = player
+			end
+		end
+	end
+	return closest
 end
 
--- GUI Oluştur
-local gui = Instance.new("BillboardGui")
-gui.Name = "TargetGUI"
-gui.Size = UDim2.new(0, 200, 0, 60)
-gui.StudsOffset = Vector3.new(0, 3, 0)
-gui.AlwaysOnTop = true
+-- Function: BillboardGui ekle
+local function createBillboard(targetPlayer)
+	if not targetPlayer.Character or targetPlayer.Character:FindFirstChild("TargetBillboard") then return end
 
--- İsim
-local nameLabel = Instance.new("TextLabel")
-nameLabel.Size = UDim2.new(1, 0, 0.33, 0)
-nameLabel.Position = UDim2.new(0, 0, 0, 0)
-nameLabel.BackgroundTransparency = 1
-nameLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
-nameLabel.TextStrokeTransparency = 0
-nameLabel.TextScaled = true
-nameLabel.Font = Enum.Font.GothamBold
-nameLabel.Text = ""
-nameLabel.Parent = gui
+	local bb = Instance.new("BillboardGui", targetPlayer.Character)
+	bb.Name = "TargetBillboard"
+	bb.Size = UDim2.new(0, 200, 0, 50)
+	bb.Adornee = targetPlayer.Character:FindFirstChild("Head")
+	bb.AlwaysOnTop = true
+	bb.StudsOffset = Vector3.new(0, 3, 0)
 
--- Tool
-local toolLabel = Instance.new("TextLabel")
-toolLabel.Size = UDim2.new(1, 0, 0.33, 0)
-toolLabel.Position = UDim2.new(0, 0, 0.33, 0)
-toolLabel.BackgroundTransparency = 1
-toolLabel.TextColor3 = Color3.fromRGB(255, 255, 0)
-toolLabel.TextStrokeTransparency = 0
-toolLabel.TextScaled = true
-toolLabel.Font = Enum.Font.Gotham
-toolLabel.Text = ""
-toolLabel.Parent = gui
+	local name = Instance.new("TextLabel", bb)
+	name.Size = UDim2.new(1, 0, 0.5, 0)
+	name.BackgroundTransparency = 1
+	name.TextStrokeTransparency = 0
+	name.TextColor3 = Color3.new(1, 1, 1)
+	name.Font = Enum.Font.GothamBold
+	name.TextScaled = true
+	name.Text = targetPlayer.Name
 
--- Can
-local healthLabel = Instance.new("TextLabel")
-healthLabel.Size = UDim2.new(1, 0, 0.33, 0)
-healthLabel.Position = UDim2.new(0, 0, 0.66, 0)
-healthLabel.BackgroundTransparency = 1
-healthLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
-healthLabel.TextStrokeTransparency = 0
-healthLabel.TextScaled = true
-healthLabel.Font = Enum.Font.Gotham
-healthLabel.Text = ""
-healthLabel.Parent = gui
+	local health = Instance.new("TextLabel", bb)
+	health.Size = UDim2.new(1, 0, 0.5, 0)
+	health.Position = UDim2.new(0, 0, 0.5, 0)
+	health.BackgroundTransparency = 1
+	health.TextStrokeTransparency = 0
+	health.TextColor3 = Color3.new(1, 0.3, 0.3)
+	health.Font = Enum.Font.Gotham
+	health.TextScaled = true
+	health.Name = "HealthLabel"
+	health.Text = "HP: ???"
+end
 
--- Input kontrolü
-UserInputService.InputBegan:Connect(function(input, gpe)
-    if gpe then return end
-    if input.KeyCode == Enum.KeyCode.F then
-        holdingF = true
-    end
+-- Function: Karakter yönünü döndür (shiftlock olsa bile)
+local function forceFaceTarget(targetPlayer)
+	local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+	local targetHrp = targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+	if hrp and targetHrp then
+		local direction = (targetHrp.Position - hrp.Position).Unit
+		local look = CFrame.new(hrp.Position, hrp.Position + Vector3.new(direction.X, 0, direction.Z))
+		hrp.CFrame = CFrame.new(hrp.Position) * CFrame.Angles(0, math.atan2(direction.X, direction.Z), 0)
+	end
+end
+
+-- Function: Billboard sağlığı güncelle
+local function updateHealth()
+	if target and target.Character and target.Character:FindFirstChild("TargetBillboard") then
+		local hum = target.Character:FindFirstChildOfClass("Humanoid")
+		local label = target.Character.TargetBillboard:FindFirstChild("HealthLabel")
+		if hum and label then
+			label.Text = "HP: " .. math.floor(hum.Health)
+		end
+	end
+end
+
+-- Tuş dinleyici
+UserInputService.InputBegan:Connect(function(input, processed)
+	if input.KeyCode == Enum.KeyCode.F and not processed then
+		holding = true
+		target = getClosestPlayer()
+		if target then
+			createBillboard(target)
+		end
+	end
 end)
 
 UserInputService.InputEnded:Connect(function(input)
-    if input.KeyCode == Enum.KeyCode.F then
-        holdingF = false
-        gui.Parent = nil
-        targetPlayer = nil
-    end
+	if input.KeyCode == Enum.KeyCode.F then
+		holding = false
+		if target and target.Character and target.Character:FindFirstChild("TargetBillboard") then
+			target.Character.TargetBillboard:Destroy()
+		end
+		target = nil
+	end
 end)
 
--- Ana döngü
+-- Sürekli güncelle
 RunService.RenderStepped:Connect(function()
-    if holdingF then
-        local char = getCharacter()
-        local myHRP = char:FindFirstChild("HumanoidRootPart")
-        local newTarget = getClosestPlayer()
-
-        if newTarget and newTarget.Character and newTarget.Character:FindFirstChild("HumanoidRootPart") and myHRP then
-            local targetHRP = newTarget.Character.HumanoidRootPart
-            local lookDir = (targetHRP.Position - myHRP.Position).Unit
-            myHRP.CFrame = CFrame.new(myHRP.Position, myHRP.Position + lookDir)
-
-            if targetPlayer ~= newTarget then
-                gui.Parent = targetHRP
-                targetPlayer = newTarget
-            end
-
-            -- GUI Bilgilerini güncelle
-            nameLabel.Text = "🎯 " .. newTarget.DisplayName
-            local tool = newTarget.Character:FindFirstChildOfClass("Tool")
-            toolLabel.Text = "🧰 Tool: " .. (tool and tool.Name or "Yok")
-            local hum = newTarget.Character:FindFirstChildOfClass("Humanoid")
-            healthLabel.Text = "❤️ Can: " .. (hum and math.floor(hum.Health) or "??")
-        end
-    end
-end
+	if holding and target then
+		forceFaceTarget(target)
+		updateHealth()
+	end
+end)
