@@ -14,8 +14,8 @@ local Window = Rayfield:CreateWindow({
 
     ConfigurationSaving = {
         Enabled = true,
-        FolderName = "Axrex", -- Klasör adı (string olmalı)
-        FileName = "Axrex"
+        FolderName = "XantiHubV2", -- Klasör adı (string olmalı)
+        FileName = "XantiHub"
     },
 
     Discord = {
@@ -48,12 +48,6 @@ local Button = Tab:CreateButton({
         -- Butona basıldığında yapılacak işlemler
         loadstring(game:HttpGet('https://raw.githubusercontent.com/AxerBa/XantiHubV2/main/Modulas/Aim.lua'))()
     end,
-})
-Rayfield:Notify({
-   Title = "Discord",
-   Content = "https://discord.gg/88WNKexT",
-   Duration = 6.5,
-   Image = 4483362458,
 })
 
 -- Kaydedilmiş yapılandırmayı yükle
