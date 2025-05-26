@@ -19,8 +19,8 @@ local Window = Rayfield:CreateWindow({
     },
 
     Discord = {
-        Enabled = false,
-        Invite = "noinvitelink",
+        Enabled = true,
+        Invite = "https://discord.gg/88WNKexT",
         RememberJoins = true
     },
 
@@ -48,6 +48,12 @@ local Button = Tab:CreateButton({
         -- Butona basıldığında yapılacak işlemler
         loadstring(game:HttpGet('https://raw.githubusercontent.com/AxerBa/XantiHubV2/main/Modulas/Aim.lua'))()
     end,
+})
+Rayfield:Notify({
+   Title = "Discord",
+   Content = "https://discord.gg/88WNKexT",
+   Duration = 6.5,
+   Image = 4483362458,
 })
 
 -- Kaydedilmiş yapılandırmayı yükle
