@@ -19,8 +19,8 @@ local Window = Rayfield:CreateWindow({
     },
 
     Discord = {
-        Enabled = true,
-        Invite = "https://discord.gg/88WNKexT",
+        Enabled = false,
+        Invite = "noninvitelink",
         RememberJoins = true
     },
 
