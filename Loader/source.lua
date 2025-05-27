@@ -85,7 +85,7 @@ TabMain:CreateToggle({
 -- Scripts sekmesi
 local scriptList = {
     {Name = "Tsb | Aim", Url = "https://raw.githubusercontent.com/AxerBa/XantiHubV2/main/Modulas/Aim.lua"},
-    {Name = "Coming Soon", Url = "https://raw.githubusercontent.com/xQuartyx/DonateMe/main/Script.lua"},
+    {Name = "XantiDex", Url = "https://raw.githubusercontent.com/AxerBa/XantiHubV2/main/Modulas/XantiDex.lua"},
     {Name = "Coming Soon", Url = "https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Build%20A%20Boat%20For%20Treasure"},
     {Name = "Coming Soon", Url = "https://raw.githubusercontent.com/Veztiez/King-Legacy/main/Script.lua"},
     {Name = "Coming Soon", Url = "https://raw.githubusercontent.com/VeriHubX/AFS-Script/main/AFS"},
@@ -94,7 +94,7 @@ local scriptList = {
 }
 
 for _, script in ipairs(scriptList) do
-    TabScripts:CreateToggle({
+    TabScripts:CreateButton({
         Name = script.Name,
         CurrentValue = false,
         Callback = function(Value)
