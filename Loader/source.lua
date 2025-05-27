@@ -20,8 +20,8 @@ local Window = Rayfield:CreateWindow({
         FileName = "Axrex"
     },
     Discord = {
-        Enabled = false,
-        Invite = "noinvitelink",
+        Enabled = true,
+        Invite = "uWHZYHHu",
         RememberJoins = true
     },
     KeySystem = true,
