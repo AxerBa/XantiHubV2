@@ -45,8 +45,7 @@ local TabCre = Window:CreateTab("Credit", 4483362458)
 local Button = Tab:CreateButton({
     Name = "Tsb | Aim V1",
     Callback = function()
-        -- Butona basıldığında yapılacak işlemler
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/AxerBa/XantiHubV2/main/Modulas/Aim.lua'))()
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/AxerBa/XantiHubV2/main/Modulas/Aim.lua'))()
     end,
 })
 
