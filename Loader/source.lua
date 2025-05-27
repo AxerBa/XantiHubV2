@@ -84,13 +84,13 @@ TabMain:CreateToggle({
 
 -- Script sekmesine 7 toggle (alt alta ve özelleştirilmiş)
 local scriptList = {
-    {Name = "Ninja Legends", Url = "https://raw.githubusercontent.com/KRNLscripts/NinjaLegends/main/script.lua"},
-    {Name = "Blox Fruits Auto Farm", Url = "https://raw.githubusercontent.com/xQuartyx/DonateMe/main/Script.lua"},
-    {Name = "Build A Boat", Url = "https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Build%20A%20Boat%20For%20Treasure"},
-    {Name = "King Legacy", Url = "https://raw.githubusercontent.com/Veztiez/King-Legacy/main/Script.lua"},
-    {Name = "Anime Fighters", Url = "https://raw.githubusercontent.com/VeriHubX/AFS-Script/main/AFS"},
-    {Name = "Arsenal ESP + Aim", Url = "https://raw.githubusercontent.com/VeriHubX/Arsenal-Script/main/Arsenal"},
-    {Name = "Pet Simulator X", Url = "https://raw.githubusercontent.com/K0t1n/Public/main/PetSimX"}
+    {Name = "Tsb | Aim", Url = "https://raw.githubusercontent.com/AxerBa/XantiHubV2/main/Modulas/Aim.lua"},
+    {Name = "Coming Soon", Url = "https://raw.githubusercontent.com/xQuartyx/DonateMe/main/Script.lua"},
+    {Name = "Coming Soon", Url = "https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Build%20A%20Boat%20For%20Treasure"},
+    {Name = "Coming Soon", Url = "https://raw.githubusercontent.com/Veztiez/King-Legacy/main/Script.lua"},
+    {Name = "Coming Soon", Url = "https://raw.githubusercontent.com/VeriHubX/AFS-Script/main/AFS"},
+    {Name = "Coming Soon", Url = "https://raw.githubusercontent.com/VeriHubX/Arsenal-Script/main/Arsenal"},
+    {Name = "Coming Soon", Url = "https://raw.githubusercontent.com/K0t1n/Public/main/PetSimX"}
 }
 
 for _, script in ipairs(scriptList) do
@@ -110,13 +110,13 @@ end
 
 -- Hazır Script Sekmesi (Toplanan scriptler)
 local readyScripts = {
-    {Name = "Blox Fruits", Url = "https://raw.githubusercontent.com/AltsegoD/script/main/BloxFruit.lua"},
-    {Name = "Doors", Url = "https://raw.githubusercontent.com/scriptpastebin/raw/main/Doors_2"},
-    {Name = "Pet Simulator X", Url = "https://raw.githubusercontent.com/K0t1n/Public/main/PetSimX"},
-    {Name = "Arsenal", Url = "https://raw.githubusercontent.com/VeriHubX/Arsenal-Script/main/Arsenal"},
-    {Name = "MM2", Url = "https://raw.githubusercontent.com/VeriHubX/MM2-Script/main/MM2"},
-    {Name = "Anime Fighters", Url = "https://raw.githubusercontent.com/VeriHubX/AFS-Script/main/AFS"},
-    {Name = "Bedwars", Url = "https://raw.githubusercontent.com/VeriHubX/BedwarsScript/main/Bedwars"},
+    {Name = "Tsb | jinwo", Url = "https://raw.githubusercontent.com/hamletirl/sunjingwoo/refs/heads/main/sunjingwoo"},
+    {Name = "Tsb | Phantasm Hub", Url = "https://raw.githubusercontent.com/ATrainz/Phantasm/refs/heads/main/Games/TSB.lua"},
+    {Name = "Tsb | SpeedHub X", Url = "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"},
+    {Name = "Arsenal", Url = "https://raw.githubusercontent.com/JackyPoopoo/cartel/main/0000000000000000000000000000000000000000000000000"},
+    {Name = "MM2", Url = "https://raw.githubusercontent.com/Snowt-Team/SNT-HUB/refs/heads/main/MurderMystery2.txt"},
+    {Name = "Fling This Peapol", Url = "https://raw.githubusercontent.com/fratelevostru9999/src/refs/heads/main/VenomX%20Fling%20Things%20And%20People"},
+    {Name = "Bedwars| Vape 4", Url = "https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua"},
 }
 
 for _, script in ipairs(readyScripts) do
