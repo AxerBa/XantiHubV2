@@ -40,6 +40,7 @@ local Window = Rayfield:CreateWindow({
 local TabMain = Window:CreateTab("Main", 4483362458)
 local TabScripts = Window:CreateTab("Scripts", 4483362458)
 local TabReadyScripts = Window:CreateTab("Hazır Script", 4483362458)
+local TabCharacter = Window:CreateTab("Karakter", 4483362458)
 local TabCredit = Window:CreateTab("Credit", 4483362458)
 
 -- Bildirim fonksiyonu
@@ -58,10 +59,9 @@ local function Notify(title, content)
     })
 end
 
--- GUI yüklendiğinde hoş geldin bildirimi
 Notify("Discord", "Xanti Hub'e Hoş Geldin!")
 
--- Aim scriptini toggle ile kontrol et
+-- Aim script toggle
 local AimModule = nil
 TabMain:CreateToggle({
     Name = "Tsb | Aim V1",
@@ -82,7 +82,7 @@ TabMain:CreateToggle({
     end
 })
 
--- Script sekmesine 7 toggle (alt alta ve özelleştirilmiş)
+-- Scripts sekmesi
 local scriptList = {
     {Name = "Tsb | Aim", Url = "https://raw.githubusercontent.com/AxerBa/XantiHubV2/main/Modulas/Aim.lua"},
     {Name = "Coming Soon", Url = "https://raw.githubusercontent.com/xQuartyx/DonateMe/main/Script.lua"},
@@ -108,7 +108,7 @@ for _, script in ipairs(scriptList) do
     })
 end
 
--- Hazır Script Sekmesi (Toplanan scriptler)
+-- Hazır script sekmesi
 local readyScripts = {
     {Name = "Tsb | jinwo", Url = "https://raw.githubusercontent.com/hamletirl/sunjingwoo/refs/heads/main/sunjingwoo"},
     {Name = "Tsb | Phantasm Hub", Url = "https://raw.githubusercontent.com/ATrainz/Phantasm/refs/heads/main/Games/TSB.lua"},
@@ -129,7 +129,76 @@ for _, script in ipairs(readyScripts) do
     })
 end
 
--- Credit sekmesine By Axrex butonu
+-- Karakter Sekmesi Özellikleri
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+TabCharacter:CreateSlider({
+    Name = "WalkSpeed",
+    Range = {16, 100},
+    Increment = 1,
+    CurrentValue = 16,
+    Callback = function(Value)
+        pcall(function()
+            character.Humanoid.WalkSpeed = Value
+        end)
+    end
+})
+
+TabCharacter:CreateSlider({
+    Name = "JumpPower",
+    Range = {50, 200},
+    Increment = 5,
+    CurrentValue = 50,
+    Callback = function(Value)
+        pcall(function()
+            character.Humanoid.JumpPower = Value
+        end)
+    end
+})
+
+local flyEnabled = false
+TabCharacter:CreateToggle({
+    Name = "Fly",
+    CurrentValue = false,
+    Callback = function(Value)
+        flyEnabled = Value
+        if flyEnabled then
+            local FlyScript = loadstring(game:HttpGet("https://pastebin.com/raw/YkTvKcxT"))()
+            Notify("Karakter", "Uçuş aktif!")
+        else
+            Notify("Karakter", "Uçuş devre dışı (yeniden başlatılmalı).")
+        end
+    end
+})
+
+local noclipConnection = nil
+TabCharacter:CreateToggle({
+    Name = "NoClip",
+    CurrentValue = false,
+    Callback = function(Value)
+        if Value then
+            noclipConnection = game:GetService("RunService").Stepped:Connect(function()
+                if player.Character and player.Character:FindFirstChild("Humanoid") then
+                    for _, part in pairs(player.Character:GetDescendants()) do
+                        if part:IsA("BasePart") and part.CanCollide then
+                            part.CanCollide = false
+                        end
+                    end
+                end
+            end)
+            Notify("Karakter", "NoClip aktif!")
+        else
+            if noclipConnection then
+                noclipConnection:Disconnect()
+                noclipConnection = nil
+                Notify("Karakter", "NoClip devre dışı bırakıldı!")
+            end
+        end
+    end
+})
+
+-- Credit sekmesine By Axrex
 TabCredit:CreateButton({
     Name = "By Axrex",
     Callback = function()
