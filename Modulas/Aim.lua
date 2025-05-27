@@ -8,6 +8,8 @@ local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 local holding = false
 local target = nil
+local connections = {}
+local active = false
 
 -- Function: En yakın oyuncuyu bul
 local function getClosestPlayer()
@@ -57,7 +59,7 @@ local function createBillboard(targetPlayer)
 	health.Text = "HP: ???"
 end
 
--- Function: Karakter yönünü döndür (shiftlock olsa bile)
+-- Function: Karakter yönünü döndür
 local function forceFaceTarget(targetPlayer)
 	local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
 	local targetHrp = targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart")
@@ -65,7 +67,7 @@ local function forceFaceTarget(targetPlayer)
 	if hrp and targetHrp then
 		local direction = (targetHrp.Position - hrp.Position).Unit
 		local look = CFrame.new(hrp.Position, hrp.Position + Vector3.new(direction.X, 0, direction.Z))
-		hrp.CFrame = CFrame.new(hrp.Position) * CFrame.Angles(0, math.atan2(direction.X, direction.Z), 0)
+		hrp.CFrame = look
 	end
 end
 
@@ -80,31 +82,54 @@ local function updateHealth()
 	end
 end
 
--- Tuş dinleyici
-UserInputService.InputBegan:Connect(function(input, processed)
-	if input.KeyCode == Enum.KeyCode.F and not processed then
-		holding = true
-		target = getClosestPlayer()
-		if target then
-			createBillboard(target)
+-- Açma fonksiyonu
+_G.EnableAim = function()
+	if active then return end
+	active = true
+
+	connections.InputBegan = UserInputService.InputBegan:Connect(function(input, processed)
+		if input.KeyCode == Enum.KeyCode.F and not processed then
+			holding = true
+			target = getClosestPlayer()
+			if target then
+				createBillboard(target)
+			end
+		end
+	end)
+
+	connections.InputEnded = UserInputService.InputEnded:Connect(function(input)
+		if input.KeyCode == Enum.KeyCode.F then
+			holding = false
+			if target and target.Character and target.Character:FindFirstChild("TargetBillboard") then
+				target.Character.TargetBillboard:Destroy()
+			end
+			target = nil
+		end
+	end)
+
+	connections.Render = RunService.RenderStepped:Connect(function()
+		if holding and target then
+			forceFaceTarget(target)
+			updateHealth()
+		end
+	end)
+end
+
+-- Kapatma fonksiyonu
+_G.DisableAim = function()
+	if not active then return end
+	active = false
+	holding = false
+
+	if target and target.Character and target.Character:FindFirstChild("TargetBillboard") then
+		target.Character.TargetBillboard:Destroy()
+	end
+	target = nil
+
+	for _, conn in pairs(connections) do
+		if conn and conn.Disconnect then
+			conn:Disconnect()
 		end
 	end
-end)
-
-UserInputService.InputEnded:Connect(function(input)
-	if input.KeyCode == Enum.KeyCode.F then
-		holding = false
-		if target and target.Character and target.Character:FindFirstChild("TargetBillboard") then
-			target.Character.TargetBillboard:Destroy()
-		end
-		target = nil
-	end
-end)
-
--- Sürekli güncelle
-RunService.RenderStepped:Connect(function()
-	if holding and target then
-		forceFaceTarget(target)
-		updateHealth()
-	end
-end)
+	table.clear(connections)
+end
